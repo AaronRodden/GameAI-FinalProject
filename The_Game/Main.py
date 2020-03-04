@@ -1,13 +1,13 @@
 import pygame
 import math
 
+# X MUST BE LARGER THAN Y
+# use these to scale the buttons with the screen
+x_size = 1200
+y_size = 800
+
 
 def main():
-    # X MUST BE LARGER THAN Y
-    # use these to scale the buttons with the screen
-    x_size = 1200
-    y_size = 800
-
     pygame.init()
 
     screen = pygame.display.set_mode((x_size, y_size))
@@ -27,39 +27,75 @@ def main():
     # use this for scaling button distances
     scale = math.floor((x_size / y_size) * 3)
 
-    # red = 0
-    # green = 1
-    # blue = 2
-    # light purple = 3
-    # aqua blue = 4
-    colors = [(255, 0, 0), (0, 255, 0), (0, 0, 255), (141, 91, 112), (0, 59, 86)]
+    # forest green = 0
+    # light purple = 1
+    # aqua blue = 2
+    colors = [(105, 149, 0), (141, 91, 112), (0, 59, 86)]
 
     running = True
     while running:
+        # insert if needed for the future
+        clock = pygame.time.Clock()
+
         for event in pygame.event.get():
 
-            # draw on screen, color, place, and make just outline fill
-            pygame.draw.rect(screen, colors[4], (math.floor(x_size * 0.3), math.floor(y_size * 0.15),
-                                                 (math.floor(x_size * 0.7) - math.floor(x_size * 0.3)),
-                                                 (math.floor(y_size * 0.25) - math.floor(y_size * 0.15))),
-                             scale)
+            buttons = button_make()
+            color_count = len(colors) - 1
+            for x in buttons:
+                pygame.draw.rect(screen, colors[color_count], x, scale)
+                color_count -= 1
 
-            pygame.draw.rect(screen, colors[3], (math.floor(x_size * 0.3), math.floor(y_size * 0.45),
-                                                 (math.floor(x_size * 0.7) - math.floor(x_size * 0.3)),
-                                                 (math.floor(y_size * 0.55) - math.floor(y_size * 0.45))),
-                             scale)
-
-            pygame.draw.rect(screen, colors[0], (math.floor(x_size * 0.3), math.floor(y_size * 0.75),
-                                                 (math.floor(x_size * 0.7) - math.floor(x_size * 0.3)),
-                                                 (math.floor(y_size * 0.85) - math.floor(y_size * 0.75))),
-                             scale)
-
-            pygame.display.update()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                for x in buttons:
+                    if x.collidepoint(event.pos):
+                        if x is buttons[0]:
+                            print("in game")
+                            game_screen()
+                        elif x is buttons[1]:
+                            print("in controls")
+                            controls()
+                        elif x is buttons[2]:
+                            print("in about")
+                            about()
 
             if event.type == pygame.QUIT:
                 running = False
 
+            pygame.display.update()
+
     pygame.quit()
+
+
+# make the buttons for the main screen
+def button_make():
+    # draw on screen, color, place, and make just outline fill
+    button1 = pygame.Rect((math.floor(x_size * 0.3), math.floor(y_size * 0.25),
+                           (math.floor(x_size * 0.7) - math.floor(x_size * 0.3)),
+                           (math.floor(y_size * 0.35) - math.floor(y_size * 0.25))))
+
+    button2 = pygame.Rect((math.floor(x_size * 0.3), math.floor(y_size * 0.55),
+                           (math.floor(x_size * 0.7) - math.floor(x_size * 0.3)),
+                           (math.floor(y_size * 0.65) - math.floor(y_size * 0.55))))
+
+    button3 = pygame.Rect((math.floor(x_size * 0.3), math.floor(y_size * 0.85),
+                           (math.floor(x_size * 0.7) - math.floor(x_size * 0.3)),
+                           (math.floor(y_size * 0.95) - math.floor(y_size * 0.85))))
+
+    buttons = [button1, button2, button3]
+
+    return buttons
+
+
+def game_screen():
+    return
+
+
+def controls():
+    return
+
+
+def about():
+    return
 
 
 if __name__ == "__main__":
