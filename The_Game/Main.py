@@ -14,15 +14,7 @@ def main():
 
     pygame.display.set_caption("Sign Language Recognition Game")
 
-    alphabet = ['K_a', 'K_b', 'K_c',
-                'K_d', 'K_e', 'K_f',
-                'K_g', 'K_h', 'K_i',
-                'K_j', 'K_k', 'K_l',
-                'K_m', 'K_n', 'K_o',
-                'K_p', 'K_q', 'K_r',
-                'K_s', 'K_t', 'K_u',
-                'K_v', 'K_w', 'K_x',
-                'K_y', 'K_z']
+    button_words = ['About', 'Controls', 'Play']
 
     # use this for scaling button distances
     scale = math.floor((x_size / y_size) * 3)
@@ -45,6 +37,14 @@ def main():
                 pygame.draw.rect(screen, colors[color_count], x, scale)
                 color_count -= 1
 
+            word_count = len(button_words) - 1
+            for x in buttons:
+                text = pygame.font.Font("freesansbold.ttf", scale * 10)
+                text_s, text_r = text_objects(button_words[word_count], text)
+                text_r.center = (x.centerx, x.centery)
+                screen.blit(text_s, text_r)
+                word_count -= 1
+
             if event.type == pygame.MOUSEBUTTONDOWN:
                 for x in buttons:
                     if x.collidepoint(event.pos):
@@ -64,6 +64,11 @@ def main():
             pygame.display.update()
 
     pygame.quit()
+
+
+def text_objects(text, font):
+    text_surface = font.render(text, True, (255, 255, 255))
+    return text_surface, text_surface.get_rect()
 
 
 # make the buttons for the main screen
@@ -87,6 +92,15 @@ def button_make():
 
 
 def game_screen():
+    alphabet = ['K_a', 'K_b', 'K_c',
+                'K_d', 'K_e', 'K_f',
+                'K_g', 'K_h', 'K_i',
+                'K_j', 'K_k', 'K_l',
+                'K_m', 'K_n', 'K_o',
+                'K_p', 'K_q', 'K_r',
+                'K_s', 'K_t', 'K_u',
+                'K_v', 'K_w', 'K_x',
+                'K_y', 'K_z']
     return
 
 
