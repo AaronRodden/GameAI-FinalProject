@@ -30,16 +30,17 @@ def main():
         clock = pygame.time.Clock()
 
         for event in pygame.event.get():
-
             buttons = button_make()
             color_count = len(colors) - 1
+
             for x in buttons:
                 pygame.draw.rect(screen, colors[color_count], x, scale)
                 color_count -= 1
 
             word_count = len(button_words) - 1
+
             for x in buttons:
-                text = pygame.font.Font("freesansbold.ttf", scale * 10)
+                text = pygame.font.Font("freesansbold.ttf", math.floor(x.height / 2))
                 text_s, text_r = text_objects(button_words[word_count], text)
                 text_r.center = (x.centerx, x.centery)
                 screen.blit(text_s, text_r)
@@ -49,21 +50,22 @@ def main():
                 for x in buttons:
                     if x.collidepoint(event.pos):
                         if x is buttons[0]:
-                            print("in game")
-                            game_screen()
+                            game_screen(screen)
+                            screen.fill((0, 0, 0))
                         elif x is buttons[1]:
-                            print("in controls")
-                            controls()
+                            controls(screen)
+                            screen.fill((0, 0, 0))
                         elif x is buttons[2]:
-                            print("in about")
-                            about()
+                            about(screen)
+                            screen.fill((0, 0, 0))
 
             if event.type == pygame.QUIT:
                 running = False
 
             pygame.display.update()
 
-    pygame.quit()
+    # pygame.quit()
+    # exit()
 
 
 def text_objects(text, font):
@@ -91,7 +93,9 @@ def button_make():
     return buttons
 
 
-def game_screen():
+def game_screen(screen):
+    screen.fill((0, 0, 0))
+
     alphabet = ['K_a', 'K_b', 'K_c',
                 'K_d', 'K_e', 'K_f',
                 'K_g', 'K_h', 'K_i',
@@ -101,14 +105,59 @@ def game_screen():
                 'K_s', 'K_t', 'K_u',
                 'K_v', 'K_w', 'K_x',
                 'K_y', 'K_z']
+
+    running = True
+    while running:
+        # insert if needed for the future
+        clock = pygame.time.Clock()
+
+        for event in pygame.event.get():
+            button1 = pygame.Rect((math.floor(x_size * 0.25), math.floor(y_size * 0.25),
+                                   (math.floor(x_size * 0.75) - math.floor(x_size * 0.25)),
+                                   (math.floor(y_size * 0.75) - math.floor(y_size * 0.25))))
+
+            pygame.draw.rect(screen, (255, 0, 0), button1)
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    running = False
+
+            pygame.display.update()
     return
 
 
-def controls():
+def controls(screen):
+    screen.fill((0, 0, 0))
+
+    running = True
+    while running:
+        # insert if needed for the future
+        clock = pygame.time.Clock()
+
+        for event in pygame.event.get():
+
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    running = False
+
+            pygame.display.update()
     return
 
 
-def about():
+def about(screen):
+    screen.fill((0, 0, 0))
+
+    running = True
+    while running:
+        # insert if needed for the future
+        clock = pygame.time.Clock()
+
+        for event in pygame.event.get():
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    running = False
+
+            pygame.display.update()
     return
 
 
