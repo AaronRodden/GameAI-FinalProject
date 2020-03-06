@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 from keras.utils import np_utils
 from keras.optimizers import SGD
 
+# https://medium.com/analytics-vidhya/sign-language-recognition-using-cnn-and-opencv-beginner-level-72091ca35a19
 
 # PREPROCESSING DATA ------------------------------------------------------------------
 data_test = pd.read_csv("./data/sign_mnist_test/sign_mnist_test.csv")
