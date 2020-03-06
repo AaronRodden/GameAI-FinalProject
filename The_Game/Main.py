@@ -24,15 +24,15 @@ alphabet = ['pygame.K_a', 'pygame.K_b', 'pygame.K_c',
             'pygame.K_v', 'pygame.K_w', 'pygame.K_x',
             'pygame.K_y', 'pygame.K_z']
 
-value_dict = {'pygame.K_a': "a", 'pygame.K_b': "b", 'pygame.K_c': "c",
-              'pygame.K_d': "d", 'pygame.K_e': "e", 'pygame.K_f': "f",
-              'pygame.K_g': "g", 'pygame.K_h': "h", 'pygame.K_i': "i",
-              'pygame.K_j': "j", 'pygame.K_k': "k", 'pygame.K_l': "l",
-              'pygame.K_m': "m", 'pygame.K_n': "n", 'pygame.K_o': "o",
-              'pygame.K_p': "p", 'pygame.K_q': "q", 'pygame.K_r': "r",
-              'pygame.K_s': "s", 'pygame.K_t': "t", 'pygame.K_u': "u",
-              'pygame.K_v': "v", 'pygame.K_w': "w", 'pygame.K_x': "x",
-              'pygame.K_y': "y", 'pygame.K_z': "z"}
+value_dict = {'pygame.K_a': 'a', 'pygame.K_b': 'b', 'pygame.K_c': 'c',
+              'pygame.K_d': 'd', 'pygame.K_e': 'e', 'pygame.K_f': 'f',
+              'pygame.K_g': 'g', 'pygame.K_h': 'h', 'pygame.K_i': 'i',
+              'pygame.K_j': 'j', 'pygame.K_k': 'k', 'pygame.K_l': 'l',
+              'pygame.K_m': 'm', 'pygame.K_n': 'n', 'pygame.K_o': 'o',
+              'pygame.K_p': 'p', 'pygame.K_q': 'q', 'pygame.K_r': 'r',
+              'pygame.K_s': 's', 'pygame.K_t': 't', 'pygame.K_u': 'u',
+              'pygame.K_v': 'v', 'pygame.K_w': 'w', 'pygame.K_x': 'x',
+              'pygame.K_y': 'y', 'pygame.K_z': 'z'}
 
 
 def increment():
@@ -127,9 +127,14 @@ def game_screen():
     cover = pygame.Rect((math.floor(x_size * 0.65), math.floor(y_size * 0.05),
                          (math.floor(x_size * 0.75) - math.floor(x_size * 0.65)),
                          (math.floor(y_size * 0.15) - math.floor(y_size * 0.05))))
+    cover2 = pygame.Rect((math.floor(x_size * 0.65), math.floor(y_size * 0.85),
+                         (math.floor(x_size * 0.75) - math.floor(x_size * 0.65)),
+                         (math.floor(y_size) - math.floor(y_size * 0.85))))
 
     running = True
     counter = 3
+    current_val = None
+
     while running:
         clock.tick(60)
         increment()
@@ -144,12 +149,35 @@ def game_screen():
             text_s, text_r = text_objects(str(counter), text)
             text_r.center = (math.floor(x_size * 0.7), math.floor(y_size * 0.1))
             screen.blit(text_s, text_r)
+
         else:
             # Write the title text for this portion of the game
             text = pygame.font.Font("freesansbold.ttf", math.floor(x_size * 0.03))
             text_s, text_r = text_objects(str(counter), text)
             text_r.center = (math.floor(x_size * 0.7), math.floor(y_size * 0.1))
             screen.blit(text_s, text_r)
+
+        if counter == 3 and v % 60 == 0:
+            print(current_val)
+            pygame.draw.rect(screen, (0, 0, 0), cover2)
+            if current_val is None:
+                # Write the title text for this portion of the game
+                text = pygame.font.Font("freesansbold.ttf", math.floor(x_size * 0.03))
+                text_s, text_r = text_objects("NO INPUT", text)
+                text_r.center = (math.floor(x_size * 0.7), math.floor(y_size * 0.9))
+                screen.blit(text_s, text_r)
+            else:
+                # Write the title text for this portion of the game
+                text = pygame.font.Font("freesansbold.ttf", math.floor(x_size * 0.03))
+                text_s, text_r = text_objects(chr(current_val), text)
+                text_r.center = (math.floor(x_size * 0.7), math.floor(y_size * 0.9))
+                screen.blit(text_s, text_r)
+                current_val = None
+
+        text = pygame.font.Font("freesansbold.ttf", math.floor(x_size * 0.03))
+        text_s, text_r = text_objects("Your character is: ", text)
+        text_r.center = (math.floor(x_size * 0.4), math.floor(y_size * 0.9))
+        screen.blit(text_s, text_r)
 
         for event in pygame.event.get():
             screen.fill((0, 0, 0))
@@ -165,22 +193,15 @@ def game_screen():
             text_r.center = (math.floor(x_size * 0.45), math.floor(y_size * 0.1))
             screen.blit(text_s, text_r)
 
-            # if counter == -1:  # and event.type == pygame.KEYDOWN:
-            #     counter = 3
-            #     value = event.key
-            #     for x in alphabet:
-            #         if value == x:
-            #             value = value_dict[x]
-            #             break
-            #         text = pygame.font.Font("freesansbold.ttf", math.floor(x_size * 0.03))
-            #         text_s, text_r = text_objects("Your character is: " + value, text)
-            #         text_r.center = (math.floor(x_size * 0.4), math.floor(y_size * 0.9))
-            #         screen.blit(text_s, text_r)
-            # counter = 3
-
             if event.type == pygame.KEYDOWN:
                 if event.key == pygame.K_ESCAPE:
                     running = False
+
+                value = event.key
+                for x in alphabet:
+                    if value == x:
+                        value = value_dict[x]
+                    current_val = value
 
             if event.type == pygame.QUIT:
                 pygame.quit()
