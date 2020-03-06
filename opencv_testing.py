@@ -1,6 +1,10 @@
 import numpy as np
 import cv2
 
+
+classifier_image_height = 28
+classifier_image_width = 28
+
 class classify_zone:
     def __init__(self, start_point, end_point, color, thickness):
          self.start_point = start_point
@@ -31,9 +35,7 @@ def draw_rects(image):
 def start_video():
     
     cap = cv2.VideoCapture(0)
-    
-    processing_img = False
-    
+        
     while(True):
     
         key = cv2.waitKey(1)
@@ -44,16 +46,11 @@ def start_video():
         if key == ord('q'):
             break
         
-        if key == ord('a') and processing_img is False:
+        if key == ord('a'):
             grayscale = cv2.cvtColor(resize, cv2.COLOR_BGR2GRAY) #greyscale image
             cv2.imwrite("frame%d.jpg" % 0, grayscale) 
-            print("Processing image")
-            processing_img = True
-            #Do image processing here and send somewhere
-            img = cv2.imread("frame0.jpg")
-            crop_img = img[zone1.start_point[0] : zone1.end_point[0], zone1.start_point[1] : zone1.end_point[1]].copy()
-            cv2.imshow("cropped", crop_img)
-            processing_img = False
+            print("Image captured")
+            break
             
         final = draw_rects(resize) #add rectangles
         cv2.imshow("frame", final)
@@ -61,7 +58,25 @@ def start_video():
     
     cap.release()
     cv2.destroyAllWindows()
-
+    
+    print("Processing image")
+    
+    dim = (classifier_image_height, classifier_image_width) #Crop img
+    img = cv2.imread("frame0.jpg")
+    crop_img = img[zone1.start_point[0] : zone1.end_point[0], zone1.start_point[1] : zone1.end_point[1]].copy()
+    resized = cv2.resize(crop_img, dim, interpolation = cv2.INTER_AREA)
+    cv2.imwrite("resized_img.jpg", resized) 
+    
+    pixel_array = []
+    for i in range (resized.shape[0]): #traverses through height of the image
+        for j in range (resized.shape[1]): #traverses through width of the image
+#            print (resized[i][j])
+            pixel_array.append(resized[i][j][0])
+    
+    print(pixel_array)
+    print("Image processed")
+    #TODO: Figure out how we want to do this pipelining
+    return pixel_array
 
 def main(): 
     start_video()
