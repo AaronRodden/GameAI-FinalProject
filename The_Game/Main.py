@@ -4,6 +4,7 @@ import math
 import os
 import cv2
 from lib import video_processor
+from classifiers import prediction_driver
 
 x = 0
 y = 30
@@ -132,6 +133,10 @@ def button_make():
     return buttons
 
 
+def create_ascii_prediction(pred):
+    return pred + 65
+#    return(chr(pred+ 65))
+
 def game_screen():
     screen.fill((0, 0, 0))
 
@@ -145,9 +150,6 @@ def game_screen():
     running = True
     counter = 3
     current_val = None
-    
-#    x = threading.Thread(target=video_processor.start_video(), args=())
-#    x.start()
 
     while running:
         # Video Processing
@@ -166,6 +168,11 @@ def game_screen():
                 # Video Processing
                 video_processor.write_image(frame)
                 video_processor.process_img()
+                #Prediction 
+                confidence, prediction = prediction_driver.get_prediction()
+                #DEBUG
+                print((confidence,prediction))
+                current_val = create_ascii_prediction(prediction)
                 
             # Write the title text for this portion of the game
             text = pygame.font.Font("freesansbold.ttf", math.floor(x_size * 0.03))
@@ -181,7 +188,7 @@ def game_screen():
             screen.blit(text_s, text_r)
 
         if counter == 3 and v % 60 == 0:
-            print(current_val)
+#            print(current_val)
             pygame.draw.rect(screen, (0, 0, 0), cover2)
             if current_val is None:
                 # Write the title text for this portion of the game
@@ -231,9 +238,6 @@ def game_screen():
                 exit()
 
         pygame.display.update()
-        #We can't just put the camera here as it will continuously be called
-        #Do we have to parralelize this?
-#        x.join(None)
         
     #Video Processing
     video_processor.end_video(cap)

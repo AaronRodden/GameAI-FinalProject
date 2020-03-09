@@ -40,9 +40,13 @@ def process_img():
     resized = cv2.resize(crop_img, dim, interpolation = cv2.INTER_AREA)
     cv2.imwrite("resized_img.jpg", resized) 
     
+    im4 = np.resize(resized, (28, 28, 1))
+    im5 = np.expand_dims(im4, axis=0)
+    
     print("Image processed")
     #TODO: Figure out how we want to do this pipelining
-    return resized
+#    return resized
+    return im5
 
 def start_video(cap):
     key = cv2.waitKey(1)
