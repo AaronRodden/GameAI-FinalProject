@@ -3,7 +3,6 @@ import math
 
 import os
 import cv2
-import threading
 from lib import video_processor
 
 x = 0
