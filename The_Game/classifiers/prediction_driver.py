@@ -12,12 +12,9 @@ from lib import video_processor
 def get_prediction():
     f = load_model('classifiers/CNNmodel.h5')
     
-    input = video_processor.process_img()
+    image = video_processor.process_img()
     
-    im4 = np.resize(input, (28, 28, 1))
-    im5 = np.expand_dims(im4, axis=0)
-    
-    return model_prediction(f, im5)
+    return model_prediction(f, image)
 
 def model_prediction(model, image):
     data = np.asarray( image, dtype="int32" )
