@@ -4,6 +4,7 @@ import math
 import os
 import cv2
 from lib import video_processor
+from classifiers import prediction_driver
 
 x = 0
 y = 30
@@ -166,6 +167,7 @@ def game_screen():
                 # Video Processing
                 video_processor.write_image(frame)
                 video_processor.process_img()
+                print(prediction_driver.get_prediction())
                 
             # Write the title text for this portion of the game
             text = pygame.font.Font("freesansbold.ttf", math.floor(x_size * 0.03))
@@ -181,7 +183,7 @@ def game_screen():
             screen.blit(text_s, text_r)
 
         if counter == 3 and v % 60 == 0:
-            print(current_val)
+#            print(current_val)
             pygame.draw.rect(screen, (0, 0, 0), cover2)
             if current_val is None:
                 # Write the title text for this portion of the game
