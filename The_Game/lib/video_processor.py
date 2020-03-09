@@ -32,35 +32,8 @@ def draw_rects(image):
     return rect2
 
 
-def start_video():
-    
-    cap = cv2.VideoCapture(0)
-        
-    while(True):
-    
-        key = cv2.waitKey(1)
-        
-        ret, frame = cap.read()
-        resize = cv2.resize(frame, (640, 480), interpolation = cv2.INTER_LINEAR)  #resize window
-        
-        if key == ord('q'):
-            break
-        
-        if key == ord('a'):
-            grayscale = cv2.cvtColor(resize, cv2.COLOR_BGR2GRAY) #greyscale image
-            cv2.imwrite("frame%d.jpg" % 0, grayscale) 
-            print("Image captured")
-            break
-            
-        final = draw_rects(resize) #add rectangles
-        cv2.imshow("frame", final)
-    
-    
-    cap.release()
-    cv2.destroyAllWindows()
-    
+def process_img():
     print("Processing image")
-    
     dim = (classifier_image_height, classifier_image_width) #Crop img
     img = cv2.imread("frame0.jpg")
     crop_img = img[zone1.start_point[0] : zone1.end_point[0], zone1.start_point[1] : zone1.end_point[1]].copy()
@@ -77,6 +50,55 @@ def start_video():
     print("Image processed")
     #TODO: Figure out how we want to do this pipelining
     return pixel_array
+
+def start_video(cap):
+    
+#    process_flag = False
+    
+#    cap = cv2.VideoCapture(0)
+        
+#    while(True):
+    
+    key = cv2.waitKey(1)
+    
+    ret, frame = cap.read()
+    resize = cv2.resize(frame, (640, 480), interpolation = cv2.INTER_LINEAR)  #resize window
+    
+    
+    if key == 27:
+        return None, None
+    
+    final = draw_rects(resize) #add rectangles
+    cv2.imshow("frame", final)
+    
+    return ret, resize
+    
+
+    
+#    if key == ord('a'):
+#        grayscale = cv2.cvtColor(resize, cv2.COLOR_BGR2GRAY) #greyscale image
+#        cv2.imwrite("frame%d.jpg" % 0, grayscale) 
+#        print("Image captured")
+#            process_flag = True
+#            break
+    
+    
+#    cap.release()
+#    cv2.destroyAllWindows()
+    
+#    if process_flag:
+        
+#    else:
+#        return None
+    
+def write_image(frame):
+     grayscale = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) #greyscale image
+     cv2.imwrite("frame%d.jpg" % 0, grayscale)
+     print("Image captured")
+    
+def end_video(cap):
+    cap.release()
+    cv2.destroyAllWindows()
 
 def main(): 
     start_video()
