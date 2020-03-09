@@ -22,7 +22,6 @@ clock = pygame.time.Clock()
 v = 0
 
 screen = pygame.display.set_mode((x_size, y_size))
-#screen = pygame.display.set_mode((100,100))
 
 pygame.display.set_caption("Sign Language Recognition Game")
 

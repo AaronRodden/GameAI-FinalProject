@@ -10,8 +10,6 @@ input = video_processor.process_img()
 im4 = np.resize(input, (28, 28, 1))
 im5 = np.expand_dims(im4, axis=0)
 
-#print(im5)
-
 def model_prediction(model, image):
     data = np.asarray( image, dtype="int32" )
     
