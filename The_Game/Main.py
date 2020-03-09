@@ -1,16 +1,28 @@
 import pygame
 import math
 
+import os
+import cv2
+from lib import video_processor
+
+x = 0
+y = 30
+os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (x,y)
+
+cap = cv2.VideoCapture(0)
 pygame.init()
 
 # X MUST BE LARGER THAN Y
 # use these to scale the buttons with the screen
-x_size = 1200
-y_size = 800
+#x_size = 1200
+#y_size = 800
+x_size = 800
+y_size = 600
 clock = pygame.time.Clock()
 v = 0
 
 screen = pygame.display.set_mode((x_size, y_size))
+#screen = pygame.display.set_mode((100,100))
 
 pygame.display.set_caption("Sign Language Recognition Game")
 
@@ -134,8 +146,16 @@ def game_screen():
     running = True
     counter = 3
     current_val = None
+    
+#    x = threading.Thread(target=video_processor.start_video(), args=())
+#    x.start()
 
     while running:
+        # Video Processing
+        ret, frame = video_processor.start_video(cap)
+        if ret is None and frame is None:
+            running = False
+
         clock.tick(60)
         increment()
         # update counter to go from 3 to 0 and then capture the last inputted key event
@@ -144,6 +164,10 @@ def game_screen():
             counter -= 1
             if counter < 0:
                 counter = 3
+                # Video Processing
+                video_processor.write_image(frame)
+                video_processor.process_img()
+                
             # Write the title text for this portion of the game
             text = pygame.font.Font("freesansbold.ttf", math.floor(x_size * 0.03))
             text_s, text_r = text_objects(str(counter), text)
@@ -208,6 +232,12 @@ def game_screen():
                 exit()
 
         pygame.display.update()
+        #We can't just put the camera here as it will continuously be called
+        #Do we have to parralelize this?
+#        x.join(None)
+        
+    #Video Processing
+    video_processor.end_video(cap)
 
     return
 
