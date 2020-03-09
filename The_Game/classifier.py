@@ -28,8 +28,6 @@ X_train = np.array([np.reshape(i, (28,28)) for i in X_train])
 X_test = np.array(data_test.iloc[:,:])
 X_test = np.array([np.reshape(i, (28,28)) for i in X_test])
 
-#print(X_train, X_test)
-
 num_classes = 26
 
 y_train = np.array(labels).reshape(-1)
