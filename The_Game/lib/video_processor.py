@@ -1,16 +1,15 @@
 import numpy as np
 import cv2
 
-
-classifier_image_height = 28
-classifier_image_width = 28
-
 class classify_zone:
     def __init__(self, start_point, end_point, color, thickness):
          self.start_point = start_point
          self.end_point = end_point
          self.color = color
          self. thickness = thickness
+         
+classifier_image_height = 28
+classifier_image_width = 28
 
 start_point = (10, 5) 
 end_point = (220, 215) 
@@ -34,14 +33,21 @@ def draw_rects(image):
 
 def process_img():
     print("Processing image")
-    dim = (classifier_image_height, classifier_image_width) #Crop img
+    dim = (classifier_image_height, classifier_image_width) 
+    # Read in the entire image
     img = cv2.imread("frame0.jpg")
+    # Crop the image according to the bounding box on the game camera
     crop_img = img[zone1.start_point[0] : zone1.end_point[0], zone1.start_point[1] : zone1.end_point[1]].copy()
-    resized = cv2.resize(crop_img, dim, interpolation = cv2.INTER_AREA)
+    # Grayscale the cropped image
+    grayscale = cv2.cvtColor(crop_img, cv2.COLOR_BGR2GRAY) 
+    # Add GaussianBlur
+    image_grayscale_blurred = cv2.GaussianBlur(grayscale, (15,15), 0)
+    # Resize according to what classifier was tried on (right now 28 by 28)
+    resized = cv2.resize(image_grayscale_blurred, dim, interpolation = cv2.INTER_AREA)
+    # Write the image to file (just for debugging)
     cv2.imwrite("resized_img.jpg", resized) 
     
     print("Image processed")
-    #TODO: Figure out how we want to do this pipelining
     return resized
 
 def start_video(cap):
@@ -60,8 +66,7 @@ def start_video(cap):
     return ret, resize
     
 def write_image(frame):
-     grayscale = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY) #greyscale image
-     cv2.imwrite("frame%d.jpg" % 0, grayscale)
+     cv2.imwrite("frame%d.jpg" % 0, frame)
      print("Image captured")
     
 def end_video(cap):
