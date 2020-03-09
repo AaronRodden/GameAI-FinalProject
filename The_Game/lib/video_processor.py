@@ -40,16 +40,9 @@ def process_img():
     resized = cv2.resize(crop_img, dim, interpolation = cv2.INTER_AREA)
     cv2.imwrite("resized_img.jpg", resized) 
     
-    pixel_array = []
-    for i in range (resized.shape[0]): #traverses through height of the image
-        for j in range (resized.shape[1]): #traverses through width of the image
-#            print (resized[i][j])
-            pixel_array.append(resized[i][j][0])
-    
-    print(pixel_array)
     print("Image processed")
     #TODO: Figure out how we want to do this pipelining
-    return pixel_array
+    return resized
 
 def start_video(cap):
     
