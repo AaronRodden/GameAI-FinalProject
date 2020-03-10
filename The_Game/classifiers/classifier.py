@@ -13,8 +13,8 @@ from keras.optimizers import SGD
 # https://medium.com/analytics-vidhya/sign-language-recognition-using-cnn-and-opencv-beginner-level-72091ca35a19
 
 # PREPROCESSING DATA ------------------------------------------------------------------
-data_test = pd.read_csv("../dataset/sign_mnist_test.csv")
-data_train = pd.read_csv("../dataset/sign_mnist_train.csv")
+data_test = pd.read_csv("../../dataset/sign_mnist_test.csv")
+data_train = pd.read_csv("../../dataset/sign_mnist_train.csv")
 
 
 labels = data_train['label']
