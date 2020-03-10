@@ -51,16 +51,9 @@ def process_img():
     im5 = np.expand_dims(im4, axis=0)
     
     print("Image processed")
-<<<<<<< HEAD
-<<<<<<< HEAD
     #TODO: Figure out how we want to do this pipelining
 #    return resized
     return im5
-=======
-=======
->>>>>>> 702b3fdef69f0b4085713f86008120e79b1d2ccc
-    return resized
->>>>>>> Added some documentation
 
 def start_video(cap):
     key = cv2.waitKey(1)
