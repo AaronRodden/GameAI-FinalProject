@@ -62,6 +62,10 @@ def process_img(left_flag, right_flag):
     return im5
 
 def start_video(cap, left_flag, right_flag):
+    
+#    cv2.namedWindow("win1");
+#    cv2.moveWindow("win1", 20,20);
+    
     key = cv2.waitKey(1)
     
     ret, frame = cap.read()
@@ -73,6 +77,7 @@ def start_video(cap, left_flag, right_flag):
     
     final = draw_rects(resize, left_flag, right_flag) #add rectangles
     cv2.imshow("frame", final)
+    cv2.moveWindow("frame", 825,0); #Moves window to the right of game screen
     
     return ret, resize
     
