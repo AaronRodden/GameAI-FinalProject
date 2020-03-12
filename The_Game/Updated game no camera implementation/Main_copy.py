@@ -2,24 +2,12 @@ import pygame
 import math
 import random
 
-import os
-import cv2
-from lib import video_processor
-from classifiers import prediction_driver
-
-x = 0
-y = 30
-os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (x,y)
-
-cap = cv2.VideoCapture(0)
 pygame.init()
 
 # X MUST BE LARGER THAN Y
 # use these to scale the buttons with the screen
-# x_size = 1200
-# y_size = 800
-x_size = 800
-y_size = 600
+x_size = 1200
+y_size = 800
 #Define the clock and the global counter
 clock = pygame.time.Clock()
 v = 0
@@ -154,10 +142,6 @@ def button_make():
 
     return buttons
 
-def create_ascii_prediction(pred):
-    return pred + 65
-#    return(chr(pred+ 65))
-
 #main game work
 def game_screen():
     screen.fill((0, 0, 0))
@@ -173,8 +157,8 @@ def game_screen():
                          (math.floor(x_size * 0.85) - math.floor(x_size * 0.55)),
                          (math.floor(y_size) - math.floor(y_size * 0.85))))
 
+        # Cover the text of the word
     ###SENTENCE FORMING IMPLEMENTATION
-    #Cover the text of the word
     # cover3 = pygame.Rect((math.floor(x_size * 0.1), math.floor(y_size * 0.4),
     #                      (math.floor(x_size * 0.9) - math.floor(x_size * 0.1)),
     #                      (math.floor(y_size * 0.6) - math.floor(y_size * 0.4))))
@@ -197,15 +181,10 @@ def game_screen():
     ###IMAGE IMPLEMENTATION (Comment these out to remove this part of the game)
     image_count = 5
     curr_img = image_keys.pop(random.randrange(0, image_count))
-    screen.blit(images[curr_img], (x_size * 0.15, y_size * 0.25))
+    screen.blit(images[curr_img], (x_size * 0.3, y_size * 0.3))
     ###END
 
     while running:
-        # Video Processing
-        ret, frame = video_processor.start_video(cap)
-        if ret is None and frame is None:
-            running = False
-
         clock.tick(60)
         increment()
 
@@ -236,11 +215,11 @@ def game_screen():
                 ###END
 
                 #store key and then assign it to respective alphabet character
-                # value = event.key
-                # for x in alphabet:
-                #     if value == x:
-                #         value = value_dict[x]
-                #     current_val = value
+                value = event.key
+                for x in alphabet:
+                    if value == x:
+                        value = value_dict[x]
+                    current_val = value
 
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -257,15 +236,6 @@ def game_screen():
             counter -= 1
             if counter < 0:
                 counter = 3
-                # Video Processing
-                video_processor.write_image(frame)
-                video_processor.process_img()
-                #Prediction
-                confidence, prediction = prediction_driver.get_prediction()
-                #DEBUG
-                print((confidence,prediction))
-                current_val = create_ascii_prediction(prediction)
-
             # Write the title text for this portion of the game
             text = pygame.font.Font("freesansbold.ttf", math.floor(x_size * 0.03))
             text_s, text_r = text_objects(str(counter), text)
@@ -307,8 +277,8 @@ def game_screen():
                 text_r.center = (math.floor(x_size * 0.7), math.floor(y_size * 0.9))
                 screen.blit(text_s, text_r)
 
-                ###IMAGE IMPLEMENTATION
                 #see if the input and image character are equal
+                ###IMAGE IMPLEMENTATION
                 if chr(current_val) == curr_img:
                     image_count -= 1
                     #if array is empty then reset it
@@ -323,14 +293,14 @@ def game_screen():
                     curr_img = image_keys.pop(random.randrange(0, image_count))
                     pygame.draw.rect(screen, (0, 255, 0), cover4)
                     pygame.draw.rect(screen, (0, 255, 0), cover5)
-                    screen.blit(images[curr_img], (x_size * 0.15, y_size * 0.25))
+                    screen.blit(images[curr_img], (x_size * 0.3, y_size * 0.3))
                 #if incorrect markers are red
                 else:
                     pygame.draw.rect(screen, (255, 0, 0), cover4)
                     pygame.draw.rect(screen, (255, 0, 0), cover5)
                 ###END
 
-                #serntences stored into a list and then written out until RETURN is pressed
+                #sentences stored into a list and then written out until RETURN is pressed
                 # or they reach the right side threshhold of making too large a word
                 ###SENTENCE FORMING IMPLEMENTATION
                 # current_word.append(current_val)
@@ -352,9 +322,6 @@ def game_screen():
                 current_val = None
 
         pygame.display.update()
-
-    #Video Processing
-    video_processor.end_video(cap)
 
     return
 
