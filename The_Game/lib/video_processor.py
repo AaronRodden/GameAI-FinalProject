@@ -10,7 +10,7 @@ class classify_zone:
          
 classifier_image_height = 28
 classifier_image_width = 28
-
+#
 start_point = (10, 5) 
 end_point = (220, 215) 
 color = (255, 0, 0)
@@ -24,20 +24,26 @@ thickness = 2
 zone2 = classify_zone(start_point, end_point, color, thickness)
 
 
-def draw_rects(image):
-    rect1 = cv2.rectangle(image, zone1.start_point, zone1.end_point, zone1.color, zone1.thickness)
-    rect2 = cv2.rectangle(rect1, zone2.start_point, zone2.end_point, zone2.color, zone2.thickness)
+def draw_rects(image, left_flag, right_flag):
     
-    return rect2
+    if right_flag is True:
+        rect1 = cv2.rectangle(image, zone1.start_point, zone1.end_point, zone1.color, zone1.thickness)
+        return rect1
+    if left_flag is True:
+        rect2 = cv2.rectangle(image, zone2.start_point, zone2.end_point, zone2.color, zone2.thickness)
+        return rect2
 
 
-def process_img():
+def process_img(left_flag, right_flag):
     print("Processing image")
     dim = (classifier_image_height, classifier_image_width) 
     # Read in the entire image
     img = cv2.imread("frame0.jpg")
     # Crop the image according to the bounding box on the game camera
-    crop_img = img[zone1.start_point[0] : zone1.end_point[0], zone1.start_point[1] : zone1.end_point[1]].copy()
+    if right_flag is True:
+        crop_img = img[zone1.start_point[0] : zone1.end_point[0], zone1.start_point[1] : zone1.end_point[1]].copy()
+    if left_flag is True:
+        crop_img = img[zone2.start_point[1] : zone2.end_point[1], zone2.start_point[0] : zone2.end_point[0]].copy()
     # Grayscale the cropped image
     grayscale = cv2.cvtColor(crop_img, cv2.COLOR_BGR2GRAY) 
     # Add GaussianBlur
@@ -55,7 +61,7 @@ def process_img():
 #    return resized
     return im5
 
-def start_video(cap):
+def start_video(cap, left_flag, right_flag):
     key = cv2.waitKey(1)
     
     ret, frame = cap.read()
@@ -65,7 +71,7 @@ def start_video(cap):
     if key == 27:
         return None, None
     
-    final = draw_rects(resize) #add rectangles
+    final = draw_rects(resize, left_flag, right_flag) #add rectangles
     cv2.imshow("frame", final)
     
     return ret, resize

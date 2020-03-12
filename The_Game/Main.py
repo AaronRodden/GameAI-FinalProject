@@ -2,15 +2,15 @@ import pygame
 import math
 
 import os
-#import cv2
-#from lib import video_processor
-#from classifiers import prediction_driver
+import cv2
+from lib import video_processor
+from classifiers import prediction_driver
 
 x = 0
 y = 30
 os.environ['SDL_VIDEO_WINDOW_POS'] = "%d,%d" % (x,y)
 
-#cap = cv2.VideoCapture(0)
+cap = cv2.VideoCapture(0)
 pygame.init()
 
 # X MUST BE LARGER THAN Y
@@ -207,12 +207,15 @@ def game_screen():
     running = True
     counter = 3
     current_val = None
+    
+    global left_hand_global
+    global right_hand_global
 
     while running:
         # Video Processing
-#        ret, frame = video_processor.start_video(cap)
-#        if ret is None and frame is None:
-#            running = False
+        ret, frame = video_processor.start_video(cap, left_hand_global, right_hand_global)
+        if ret is None and frame is None:
+            running = False
 
         clock.tick(60)
         increment()
@@ -223,13 +226,13 @@ def game_screen():
             if counter < 0:
                 counter = 3
                 # Video Processing
-#                video_processor.write_image(frame)
-#                video_processor.process_img()
-#                #Prediction 
-#                confidence, prediction = prediction_driver.get_prediction()
-#                #DEBUG
-#                print((confidence,prediction))
-#                current_val = create_ascii_prediction(prediction)
+                video_processor.write_image(frame)
+                video_processor.process_img(left_hand_global, right_hand_global)
+                #Prediction 
+                confidence, prediction = prediction_driver.get_prediction(left_hand_global, right_hand_global)
+                #DEBUG
+                print((confidence,prediction))
+                current_val = create_ascii_prediction(prediction)
                 
             # Write the title text for this portion of the game
             text = pygame.font.Font("freesansbold.ttf", math.floor(x_size * 0.03))
@@ -297,7 +300,7 @@ def game_screen():
         pygame.display.update()
         
     #Video Processing
-#    video_processor.end_video(cap)
+    video_processor.end_video(cap)
 
     return
 
