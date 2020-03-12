@@ -50,11 +50,11 @@ value_dict = {'pygame.K_a': 'a', 'pygame.K_b': 'b', 'pygame.K_c': 'c',
               'pygame.K_y': 'y', 'pygame.K_z': 'z'}
 
 ###IMAGE IMPLEMENTATION (Comment these out to remove this part of the game)
-images = {'a': pygame.image.load('Images/A.jpg'),'o': pygame.image.load('Images/O.jpg'),
-            'y': pygame.image.load('Images/Y.jpg'), 'v': pygame.image.load('Images/V.jpg'),
-            'w': pygame.image.load('Images/W.jpg')}
-
-image_keys = ['a','o','y','v','w']
+#images = {'a': pygame.image.load('Images/A.jpg'),'o': pygame.image.load('Images/O.jpg'),
+#            'y': pygame.image.load('Images/Y.jpg'), 'v': pygame.image.load('Images/V.jpg'),
+#            'w': pygame.image.load('Images/W.jpg')}
+#
+#image_keys = ['a','o','y','v','w']
 ###END SECTION
 
 #Don't change
@@ -107,8 +107,8 @@ def main():
                             global v
                             v = 0
                             ###IMAGE IMPLEMENTATION (Comment these out to remove this part of the game)
-                            global image_keys
-                            image_keys = ['a','o','y','v','w']
+#                            global image_keys
+#                            image_keys = ['a','o','y','v','w']
                             ###END
                         elif x is buttons[1]:
                             controls()
@@ -174,20 +174,20 @@ def game_screen():
                          (math.floor(y_size) - math.floor(y_size * 0.85))))
 
     ###SENTENCE FORMING IMPLEMENTATION
-    #Cover the text of the word
-    # cover3 = pygame.Rect((math.floor(x_size * 0.1), math.floor(y_size * 0.4),
-    #                      (math.floor(x_size * 0.9) - math.floor(x_size * 0.1)),
-    #                      (math.floor(y_size * 0.6) - math.floor(y_size * 0.4))))
+#    Cover the text of the word
+    cover3 = pygame.Rect((math.floor(x_size * 0.1), math.floor(y_size * 0.4),
+                          (math.floor(x_size * 0.9) - math.floor(x_size * 0.1)),
+                          (math.floor(y_size * 0.6) - math.floor(y_size * 0.4))))
     ###END
 
     ###IMAGE IMPLEMENTATION (Comment these out to remove this part of the game)
-    cover4 = pygame.Rect((math.floor(x_size * 0.1), math.floor(y_size * 0.25),
-                         (math.floor(x_size * 0.15) - math.floor(x_size * 0.1)),
-                         (math.floor(y_size * 0.75) - math.floor(y_size * 0.25))))
-
-    cover5 = pygame.Rect((math.floor(x_size * 0.85), math.floor(y_size * 0.25),
-                         (math.floor(x_size * 0.9) - math.floor(x_size * 0.85)),
-                         (math.floor(y_size * 0.75) - math.floor(y_size * 0.25))))
+#    cover4 = pygame.Rect((math.floor(x_size * 0.1), math.floor(y_size * 0.25),
+#                         (math.floor(x_size * 0.15) - math.floor(x_size * 0.1)),
+#                         (math.floor(y_size * 0.75) - math.floor(y_size * 0.25))))
+#
+#    cover5 = pygame.Rect((math.floor(x_size * 0.85), math.floor(y_size * 0.25),
+#                         (math.floor(x_size * 0.9) - math.floor(x_size * 0.85)),
+#                         (math.floor(y_size * 0.75) - math.floor(y_size * 0.25))))
     ###END
 
     counter = 3
@@ -195,9 +195,9 @@ def game_screen():
     running = True
 
     ###IMAGE IMPLEMENTATION (Comment these out to remove this part of the game)
-    image_count = 5
-    curr_img = image_keys.pop(random.randrange(0, image_count))
-    screen.blit(images[curr_img], (x_size * 0.15, y_size * 0.25))
+#    image_count = 5
+#    curr_img = image_keys.pop(random.randrange(0, image_count))
+#    screen.blit(images[curr_img], (x_size * 0.15, y_size * 0.25))
     ###END
 
     while running:
@@ -229,18 +229,18 @@ def game_screen():
                     break
 
                 ###SENTENCE FORMING IMPLEMENTATION
-                # if event.key == pygame.K_RETURN:
-                #     current_word.clear()
-                #     pygame.draw.rect(screen, (0, 0, 0), cover3)
-                #     break
+                if event.key == pygame.K_RETURN:
+                    current_word.clear()
+                    pygame.draw.rect(screen, (0, 0, 0), cover3)
+                    break
                 ###END
 
                 #store key and then assign it to respective alphabet character
-                # value = event.key
-                # for x in alphabet:
-                #     if value == x:
-                #         value = value_dict[x]
-                #     current_val = value
+#                value = event.key
+#                for x in alphabet:
+#                    if value == x:
+#                        value = value_dict[x]
+#                    current_val = value
 
             if event.type == pygame.QUIT:
                 pygame.quit()
@@ -252,7 +252,7 @@ def game_screen():
 
         #reduce 1 "second" and then refresh counter, if less than 0 reset counter
         #if still counting just continue
-        if v % 4 == 0:
+        if v % 30 == 0:
             pygame.draw.rect(screen, (0, 0, 0), cover)
             counter -= 1
             if counter < 0:
@@ -283,7 +283,7 @@ def game_screen():
         ###IF YOU NEED TO SLOW DOWN OR SPEED UP COUNTER CHANGE THE VALUE AFTER % < is faster > is slower
 
         #if the counter ends then cover the chacter and display new values accordingly
-        if counter == 3 and v % 4 == 0:
+        if counter == 3 and v % 30 == 0:
             pygame.draw.rect(screen, (0, 0, 0), cover2)
 
             #if no value in last 3 seconds display no input
@@ -296,8 +296,8 @@ def game_screen():
 
                 #only used to denote incorrect for image implementation
                 ###IMAGE IMPLEMENTATION
-                pygame.draw.rect(screen, (255, 0, 0), cover4)
-                pygame.draw.rect(screen, (255, 0, 0), cover5)
+#                pygame.draw.rect(screen, (255, 0, 0), cover4)
+#                pygame.draw.rect(screen, (255, 0, 0), cover5)
                 ###END
             else:
                 #if a current value is defined then do manipulations
@@ -309,47 +309,52 @@ def game_screen():
 
                 ###IMAGE IMPLEMENTATION
                 #see if the input and image character are equal
-                if chr(current_val) == curr_img:
-                    image_count -= 1
-                    #if array is empty then reset it
-                    if image_count == 0:
-                            image_keys.append('a')
-                            image_keys.append('o')
-                            image_keys.append('y')
-                            image_keys.append('v')
-                            image_keys.append('w')
-                            image_count = 5
-                    #get the next image, draw correct markers and then display
-                    curr_img = image_keys.pop(random.randrange(0, image_count))
-                    pygame.draw.rect(screen, (0, 255, 0), cover4)
-                    pygame.draw.rect(screen, (0, 255, 0), cover5)
-                    screen.blit(images[curr_img], (x_size * 0.15, y_size * 0.25))
-                #if incorrect markers are red
-                else:
-                    pygame.draw.rect(screen, (255, 0, 0), cover4)
-                    pygame.draw.rect(screen, (255, 0, 0), cover5)
+                
+                #for keyboard input use this if
+#                print("Current val: " + chr(current_val).lower())
+#                print("Curr img: " + curr_img)
+#                if chr(current_val).lower() == curr_img:
+##                    print("CORRECT!!!")
+#                    image_count -= 1
+#                    #if array is empty then reset it
+#                    if image_count == 0:
+#                            image_keys.append('a')
+#                            image_keys.append('o')
+#                            image_keys.append('y')
+#                            image_keys.append('v')
+#                            image_keys.append('w')
+#                            image_count = 5
+#                    #get the next image, draw correct markers and then display
+#                    curr_img = image_keys.pop(random.randrange(0, image_count))
+#                    pygame.draw.rect(screen, (0, 255, 0), cover4)
+#                    pygame.draw.rect(screen, (0, 255, 0), cover5)
+#                    screen.blit(images[curr_img], (x_size * 0.15, y_size * 0.25))
+#                #if incorrect markers are red
+#                else:
+#                    pygame.draw.rect(screen, (255, 0, 0), cover4)
+#                    pygame.draw.rect(screen, (255, 0, 0), cover5)
                 ###END
 
                 #serntences stored into a list and then written out until RETURN is pressed
                 # or they reach the right side threshhold of making too large a word
                 ###SENTENCE FORMING IMPLEMENTATION
-                # current_word.append(current_val)
-                #
-                # if len(current_word) != 0:
-                #     offset = 0
-                #     for x in current_word:
-                #         text = pygame.font.Font("freesansbold.ttf", math.floor(x_size * 0.05))
-                #         text_s, text_r = text_objects(chr(x), text)
-                #         text_r.center = (math.floor(x_size * (0.2 + offset)), math.floor(y_size * 0.5))
-                #         screen.blit(text_s, text_r)
-                #         offset += 0.05
-                #         if offset > 0.70:
-                #             current_word.clear()
-                #             pygame.draw.rect(screen, (0, 0, 0), cover3)
-                #             break
+                current_word.append(current_val)
+                
+                if len(current_word) != 0:
+                    offset = 0
+                    for x in current_word:
+                        text = pygame.font.Font("freesansbold.ttf", math.floor(x_size * 0.05))
+                        text_s, text_r = text_objects(chr(x), text)
+                        text_r.center = (math.floor(x_size * (0.2 + offset)), math.floor(y_size * 0.5))
+                        screen.blit(text_s, text_r)
+                        offset += 0.05
+                        if offset > 0.70:
+                            current_word.clear()
+                            pygame.draw.rect(screen, (0, 0, 0), cover3)
+                            break
                 ###END
 
-                current_val = None
+#                current_val = None
 
         pygame.display.update()
 
