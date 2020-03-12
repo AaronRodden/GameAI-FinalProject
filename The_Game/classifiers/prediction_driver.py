@@ -9,10 +9,10 @@ from lib import video_processor
 #TODO: How can we solve this pathing issue?
 #This path will be relative to if you call from the game or from prediction_driver
 
-def get_prediction():
+def get_prediction(left_flag, right_flag):
     f = load_model('classifiers/CNNmodel.h5')
     
-    image = video_processor.process_img()
+    image = video_processor.process_img(left_flag, right_flag)
     
     return model_prediction(f, image)
 

@@ -57,6 +57,11 @@ value_dict = {'pygame.K_a': 'a', 'pygame.K_b': 'b', 'pygame.K_c': 'c',
 #image_keys = ['a','o','y','v','w']
 ###END SECTION
 
+
+left_hand_global = False
+right_hand_global = False
+
+
 #Don't change
 def increment():
     global v
@@ -102,6 +107,7 @@ def main():
                 for x in buttons:
                     if x.collidepoint(event.pos):
                         if x is buttons[0]:
+                            hand_choice_screen()
                             game_screen()
                             screen.fill((0, 0, 0))
                             global v
@@ -131,6 +137,7 @@ def text_objects(text, font):
     return text_surface, text_surface.get_rect()
 
 
+
 # make the buttons for the main screen
 def button_make():
     # draw on screen, color, place, and make just outline fill
@@ -149,6 +156,7 @@ def button_make():
     button3 = pygame.Rect((math.floor(x_size * 0.3), math.floor(y_size * 0.85),
                            (math.floor(x_size * 0.7) - math.floor(x_size * 0.3)),
                            (math.floor(y_size * 0.95) - math.floor(y_size * 0.85))))
+      
 
     buttons = [button1, button2, button3]
 
@@ -157,6 +165,56 @@ def button_make():
 def create_ascii_prediction(pred):
     return pred + 65
 #    return(chr(pred+ 65))
+    
+
+def hand_choice_screen():
+    screen.fill((0, 0, 0))
+    running = True
+    
+    colors = [(105, 149, 0), (141, 91, 112), (0, 59, 86)]
+    left_hand_button = pygame.Rect(20, 100, 300,300)    
+    right_hand_button = pygame.Rect(470, 100, 300, 300)
+    buttons = [left_hand_button, right_hand_button]
+    button_words = ["Left Handed", "Right Handed"]
+    
+    global left_hand_global
+    global right_hand_global
+    
+    for i, x in enumerate(buttons):
+            text = pygame.font.Font("freesansbold.ttf", 30)
+            text_s, text_r = text_objects(button_words[i], text)
+            text_r.center = (x.centerx, x.centery)
+            screen.blit(text_s, text_r)
+    
+    while running:
+
+        pygame.draw.rect(screen, colors[0], left_hand_button, 10)
+        pygame.draw.rect(screen, colors[1], right_hand_button, 10)
+        
+        for event in pygame.event.get():
+            
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                for x in buttons:
+                    if x.collidepoint(event.pos):
+                        if x is buttons[0]:
+                            left_hand_global = True
+                            running = False
+                        if x is buttons[1]:
+                            right_hand_global = True
+                            running = False
+                            
+            if event.type == pygame.KEYDOWN:
+                if event.key == pygame.K_ESCAPE:
+                    if left_hand_global is False or right_hand_global is False:
+                        print("Must pick which hand you want to use")
+                    else:
+                        running = False
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    exit()
+
+                    
+        pygame.display.update()
 
 #main game work
 def game_screen():
@@ -192,6 +250,11 @@ def game_screen():
 
     counter = 3
     current_val = None
+
+    
+    global left_hand_global
+    global right_hand_global
+
     running = True
 
     ###IMAGE IMPLEMENTATION (Comment these out to remove this part of the game)
@@ -200,9 +263,10 @@ def game_screen():
 #    screen.blit(images[curr_img], (x_size * 0.15, y_size * 0.25))
     ###END
 
+
     while running:
         # Video Processing
-        ret, frame = video_processor.start_video(cap)
+        ret, frame = video_processor.start_video(cap, left_hand_global, right_hand_global)
         if ret is None and frame is None:
             running = False
 
@@ -259,9 +323,9 @@ def game_screen():
                 counter = 3
                 # Video Processing
                 video_processor.write_image(frame)
-                video_processor.process_img()
-                #Prediction
-                confidence, prediction = prediction_driver.get_prediction()
+                video_processor.process_img(left_hand_global, right_hand_global)
+                #Prediction 
+                confidence, prediction = prediction_driver.get_prediction(left_hand_global, right_hand_global)
                 #DEBUG
                 print((confidence,prediction))
                 current_val = create_ascii_prediction(prediction)
